@@ -16,32 +16,6 @@
  *          https://www.gnu.org/licenses/gpl-3.0.html
  */
 
-/*******************************************************************
- * Using the DT Mobile App
- * The Disciple Tools starter plugin is intended to accelerate integrations and extensions to the Disciple Tools system.
- * This basic plugin starter has some of the basic elements to quickly launch and extension project in the pattern of
- * the Disciple Tools system.
- */
-
-/**
- * Refactoring (renaming) this plugin as your own:
- * 1. Refactor all occurrences of the name DT_Mobile_App, dt_mobile_app, and DT Mobile App with you're own plugin
- * name for the `disciple-tools-mobile-app-plugin.php and menu-and-tabs.php files.
- * 2. Update the README.md and LICENSE
- * 3. Update the default.pot file if you intend to make your plugin multilingual. Use a tool like POEdit
- * 4. Change the translation domain to in the phpcs.xml your plugin's domain: @todo
- */
-
-/**
- * The starter plugin is equipped with:
- * 1. Wordpress style requirements
- * 2. Travis Continuous Integration
- * 3. Disciple Tools Theme presence check
- * 4. Remote upgrade system for ongoing updates outside the Wordpress Directory
- * 5. Multilingual ready
- * 6. PHP Code Sniffer support (composer) @use /vendor/bin/phpcs and /vendor/bin/phpcbf
- * 7. Starter Admin menu and options page with tabs.
- */
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
