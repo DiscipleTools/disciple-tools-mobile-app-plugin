@@ -6,5 +6,8 @@ The Disciple Tools Mobile App extends the Disciple Tools system to support mobil
 ## Team
 * [Mobile App Team](https://github.com/orgs/DiscipleTools/teams/mobile-app-lead-team)
 
+## Dependent Repo
+* [Android App](https://github.com/DiscipleTools/disciple-tools-mobile-app-plugin)
+
 ## Basic Design Idea
-![Basic Design Idea](https://github.com/DiscipleTools/disciple-tools-mobile-app/raw/master/mobile-app-design.png)
+![Basic Design Idea](https://github.com/DiscipleTools/disciple-tools-mobile-app-plugin/raw/master/mobile-app-design.png)
