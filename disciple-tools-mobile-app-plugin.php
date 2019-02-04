@@ -8,7 +8,7 @@
  * GitHub Plugin URI: https://github.com/DiscipleTools/disciple-tools-mobile-app-plugin
  * Requires at least: 4.7.0
  * (Requires 4.7+ because of the integration of the REST API at 4.7 and the security requirements of this milestone version.)
- * Tested up to: 5.2
+ * Tested up to: 5.3
  *
  * @package Disciple_Tools
  * @link    https://github.com/DiscipleTools
@@ -132,6 +132,8 @@ class DT_Mobile_App {
         // sample rest api class
         require_once( 'includes/rest-api.php' );
         DT_Mobile_App_Endpoints::instance();
+
+        require_once( 'includes/admin/libraries/tgm-config.php' ); // monitors required plugin dependencies
     }
 
     /**
