@@ -26,7 +26,6 @@ add_action( 'tgmpa_register', 'dt_mobile_app_register_required_plugins' );
 //
  */
 function dt_mobile_app_register_required_plugins() {
-
     /*
      * Array of plugin arrays. Required keys are name and slug.
      * If the source is NOT from the .org repo, then source is also required.
@@ -116,7 +115,7 @@ function dt_mobile_app_register_required_plugins() {
                 'Begin installing plugins',
                 'dt_mobile_app'
             ),
-            'update_link' 					  => _n_noop(
+            'update_link'                     => _n_noop(
                 'Begin updating plugin',
                 'Begin updating plugins',
                 'dt_mobile_app'
