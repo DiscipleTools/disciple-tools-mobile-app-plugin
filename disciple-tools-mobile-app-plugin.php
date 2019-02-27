@@ -367,7 +367,7 @@ function dt_mobile_app_ajax_notice_handler() {
 
 
 
-add_action( "init", function(){
+add_action( "plugin_loaded", function(){
     /** Setup key for JWT authentication */
     if ( !defined( 'JWT_AUTH_SECRET_KEY' ) ) {
         if ( get_option( "my_jwt_key" ) ) {
