@@ -64,6 +64,7 @@ class DT_Mobile_App {
     public $dir_uri = '';
     public $img_uri = '';
     public $includes_path;
+    public $show_jwt_error = false;
 
     /**
      * Returns the instance.
@@ -93,8 +94,17 @@ class DT_Mobile_App {
      * @return void
      */
     private function __construct() {
+        add_action( 'admin_notices', [ $this, 'mobile_app_error' ] );
     }
 
+
+    public function mobile_app_error() {
+        if ( $this->show_jwt_error ){
+            $class = 'notice notice-error';
+            $message = __( 'For the mobile app to work, please remove this plugin: JWT Authentication for WP-API ', 'sample-text-domain' );
+            printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
+        }
+    }
     /**
      * Loads files needed by the plugin.
      *
@@ -104,7 +114,14 @@ class DT_Mobile_App {
      */
     private function includes() {
         require_once( 'includes/admin/admin-menu-and-tabs.php' );
+        if ( ! class_exists( 'Jwt_Auth' ) ) {
+            require_once( 'libraries/wp-api-jwt-auth/jwt-auth.php' );
+        } else {
+            $this->show_jwt_error = true;
+        }
     }
+
+
 
     /**
      * Sets up globals.
