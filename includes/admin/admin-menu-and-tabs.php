@@ -96,11 +96,11 @@ class DT_Mobile_App_Menu {
             <?php
             switch ($tab) {
                 case "general":
-                    $object = new DT_Starter_Tab_General();
+                    $object = new DT_Mobile_App_Tab_General();
                     $object->content();
                     break;
                 case "second":
-                    $object = new DT_Starter_Tab_Second();
+                    $object = new DT_Mobile_App_Tab_Second();
                     $object->content();
                     break;
                 default:
@@ -115,9 +115,9 @@ class DT_Mobile_App_Menu {
 }
 
 /**
- * Class DT_Starter_Tab_General
+ * Class DT_Mobile_App_Tab_General
  */
-class DT_Starter_Tab_General
+class DT_Mobile_App_Tab_General
 {
     public function content() {
         ?>
@@ -189,9 +189,9 @@ class DT_Starter_Tab_General
 }
 
 /**
- * Class DT_Starter_Tab_Second
+ * Class DT_Mobile_App_Tab_Second
  */
-class DT_Starter_Tab_Second
+class DT_Mobile_App_Tab_Second
 {
     public function content() {
         ?>
