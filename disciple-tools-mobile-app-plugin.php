@@ -47,13 +47,7 @@ function dt_mobile_app() {
     if ( !defined( 'DT_FUNCTIONS_READY' ) ){
         require_once get_template_directory() . '/dt-core/global-functions.php';
     }
-    /*
-     * Don't load the plugin on every rest request. Only those with the metrics namespace
-     */
-    $is_rest = dt_is_rest();
-    if ( !$is_rest || strpos( dt_get_url_path(), 'mobile' ) != false ){
-        return DT_Mobile_App::get_instance();
-    }
+    return DT_Mobile_App::get_instance();
 }
 add_action( 'plugins_loaded', 'dt_mobile_app' );
 
