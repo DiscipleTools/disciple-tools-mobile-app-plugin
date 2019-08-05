@@ -128,6 +128,8 @@ class DT_Mobile_App {
         } else {
             $this->show_jwt_error = true;
         }
+        require_once( 'includes/functions.php' );
+        new DT_Mobile_App_Plugin_Functions();
     }
 
 
