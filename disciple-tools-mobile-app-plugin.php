@@ -20,6 +20,14 @@
 if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
+
+$class_already_loaded = false;
+if ( ! class_exists( 'Jwt_Auth' ) ) {
+    require_once( 'libraries/wp-api-jwt-auth/jwt-auth.php' );
+} else {
+    $class_already_loaded = true;
+}
+
 $dt_mobile_app_required_dt_theme_version = '0.19.0';
 
 /**
@@ -122,12 +130,12 @@ class DT_Mobile_App {
      * @return void
      */
     private function includes() {
-        require_once( 'includes/admin/admin-menu-and-tabs.php' );
-        if ( ! class_exists( 'Jwt_Auth' ) ) {
-            require_once( 'libraries/wp-api-jwt-auth/jwt-auth.php' );
-        } else {
+        global $class_already_loaded;
+        if ( $class_already_loaded ){
             $this->show_jwt_error = true;
+
         }
+        require_once( 'includes/admin/admin-menu-and-tabs.php' );
         require_once( 'includes/functions.php' );
         new DT_Mobile_App_Plugin_Functions();
     }
