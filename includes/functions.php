@@ -13,7 +13,7 @@ class DT_Mobile_App_Plugin_Functions
 
     public function __construct() {
         add_filter( "dt_after_get_post_fields_filter", [ $this, "dt_filter_get_post" ], 1, 2 );
-
+        add_filter( 'jwt_auth_token_before_dispatch', [ $this, "include_fields_in_login_endpoint" ], 10, 2 );
     }
 
     private function get_group_baptized( $group_id ){
@@ -59,5 +59,9 @@ class DT_Mobile_App_Plugin_Functions
         return $fields;
     }
 
+    public function include_fields_in_login_endpoint( $data, $user ){
+        $data["locale"] = get_user_locale( $user->ID );
+        return $data;
+    }
 
 }
