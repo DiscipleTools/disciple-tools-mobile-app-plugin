@@ -338,7 +338,7 @@ if ( !function_exists( "dt_hook_ajax_notice_handler" )){
     }
 }
 
-add_action( "plugin_loaded", function(){
+add_action( "plugins_loaded", function(){
     /** Setup key for JWT authentication */
     if ( !defined( 'JWT_AUTH_SECRET_KEY' ) ) {
         if ( get_option( "my_jwt_key" ) ) {
