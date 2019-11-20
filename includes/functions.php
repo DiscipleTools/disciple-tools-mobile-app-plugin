@@ -69,7 +69,7 @@ class DT_Mobile_App_Plugin_Functions
 
     public function dt_update_user( $user, $fields ){
         if ( isset( $fields["add_push_token"] ) ) {
-            $push_tokens = get_user_option( $user->ID, 'dt_push_tokens' );
+            $push_tokens = get_user_option( 'dt_push_tokens', $user->ID );
             if ( $push_tokens === false ){
                 $push_tokens = [];
             }
@@ -79,6 +79,19 @@ class DT_Mobile_App_Plugin_Functions
                 if ( $update === false ){
                     throw new Exception( 'Something went wrong updating the push notification token', 500 );
                 }
+            }
+        }
+        if ( isset( $fields["remove_push_token"] ) ) {
+            $push_tokens = get_user_option( 'dt_push_tokens', $user->ID );
+            if ( $push_tokens === false ){
+                $push_tokens = [];
+            }
+            $index = array_search( $fields["remove_push_token"], $push_tokens );
+            if ( $index !== false ){
+                unset( $push_tokens[$index] );
+                update_user_option( $user->ID, "dt_push_tokens", $push_tokens );
+            } else {
+                throw new Exception( 'Token not found', 400 );
             }
         }
     }
