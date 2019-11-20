@@ -15,6 +15,8 @@ class DT_Mobile_App_Plugin_Functions
         add_filter( "dt_after_get_post_fields_filter", [ $this, "dt_filter_get_post" ], 1, 2 );
         add_filter( 'jwt_auth_token_before_dispatch', [ $this, "include_fields_in_login_endpoint" ], 10, 2 );
         add_action( 'dt_update_user', [ $this, 'dt_update_user' ], 10, 2 );
+        add_action( 'dt_get_site_notification_options', [ $this, "dt_get_site_notification_options" ], 10, 1 );
+        add_action( 'send_notification_on_channels', [ $this, "send_notification_on_channels" ], 20, 4 );
     }
 
     private function get_group_baptized( $group_id ){
@@ -78,6 +80,29 @@ class DT_Mobile_App_Plugin_Functions
                     throw new Exception( 'Something went wrong updating the push notification token', 500 );
                 }
             }
+        }
+    }
+
+    public static function dt_get_site_notification_options( $notifications ){
+        if ( !isset( $notifications["channels"]["push_notifications"] ) ) {
+            $notifications["channels"]["push_notifications"] = [
+                "label" => __( "Push Notifications", "disciple_tools" )
+            ];
+            foreach ( $notifications["types"] as $type_key => $type_value ){
+                $notifications["types"][$type_key]["push_notifications"] = false;
+            }
+        }
+        return $notifications;
+    }
+
+    public static function send_notification_on_channels( $user_id, $notification, $notification_type, $post_id ){
+        $user = get_user_by( "ID", $user_id );
+        //if the user is receiving notifications of this type
+        if ( $user && dt_user_notification_is_enabled( $notification_type, 'push_notifications', null, $user_id ) ) {
+            $message = Disciple_Tools_Notifications::get_notification_message_html( $notification );
+            $push_tokens = get_user_option( $user->ID, 'dt_push_tokens' );
+
+            //@todo send push notification over expo
         }
     }
 }
