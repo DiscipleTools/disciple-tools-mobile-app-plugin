@@ -136,6 +136,7 @@ class DT_Mobile_App {
 
         }
         require_once( 'includes/admin/admin-menu-and-tabs.php' );
+        require_once plugin_dir_path( __FILE__ ) . '/vendor/autoload.php';
         require_once( 'includes/functions.php' );
         new DT_Mobile_App_Plugin_Functions();
     }

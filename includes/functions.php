@@ -112,13 +112,14 @@ class DT_Mobile_App_Plugin_Functions
      * Called when any notification is sent from the theme
      */
     public static function send_notification_on_channels( $user_id, $notification, $notification_type, $post_id ){
-        require_once plugin_dir_path( __FILE__ ) . '/vendor/autoload.php';
-
         $user = get_user_by( "ID", $user_id );
         //if the user is receiving notifications of this type
         if ( $user && dt_user_notification_is_enabled( $notification_type, 'push_notifications', null, $user_id ) ) {
             $message = Disciple_Tools_Notifications::get_notification_message_html( $notification );
-            $push_tokens = get_user_option( $user->ID, 'dt_push_tokens' );
+            $push_tokens = get_user_option( $user->ID, 'dt_push_tokens' ) ?? [];
+            if ( !$push_tokens ){
+                $push_tokens = [];
+            }
             foreach ( $push_tokens as $token ){
                 $interest_details = [ $notification_type, $token ];
 
