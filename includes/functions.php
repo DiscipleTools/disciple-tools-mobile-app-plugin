@@ -116,7 +116,7 @@ class DT_Mobile_App_Plugin_Functions
         //if the user is receiving notifications of this type
         if ( $user && dt_user_notification_is_enabled( $notification_type, 'push_notifications', null, $user_id ) ) {
             $message = Disciple_Tools_Notifications::get_notification_message_html( $notification );
-            $push_tokens = get_user_option( $user->ID, 'dt_push_tokens' ) ?? [];
+            $push_tokens = get_user_option( 'dt_push_tokens', $user->ID ) ?? [];
             if ( !$push_tokens ){
                 $push_tokens = [];
             }
