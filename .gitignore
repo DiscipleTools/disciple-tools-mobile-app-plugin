@@ -1,3 +1,4 @@
 vendor/*
 !vendor/alymosul
 !vendor/autoload.php
+!vendor/composer
