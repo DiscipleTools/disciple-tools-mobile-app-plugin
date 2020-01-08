@@ -28,7 +28,7 @@ if ( ! class_exists( 'Jwt_Auth' ) ) {
     $class_already_loaded = true;
 }
 
-$dt_mobile_app_required_dt_theme_version = '0.19.0';
+$dt_mobile_app_required_dt_theme_version = '0.27.1';
 
 /**
  * Gets the instance of the `DT_Mobile_App` class.
