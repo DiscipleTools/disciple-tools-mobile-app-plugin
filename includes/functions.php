@@ -120,10 +120,9 @@ class DT_Mobile_App_Plugin_Functions
             if ( !$push_tokens ){
                 $push_tokens = [];
             }
+            $expo = \ExponentPhpSDK\Expo::normalSetup();
             foreach ( $push_tokens as $token ){
                 $interest_details = [ $notification_type, $token ];
-
-                $expo = \ExponentPhpSDK\Expo::normalSetup();
 
                 // Subscribe the recipient to the server
                 $expo->subscribe( $interest_details[0], $interest_details[1] );
@@ -132,7 +131,11 @@ class DT_Mobile_App_Plugin_Functions
                 $notification = [ 'body' => $message ];
 
                 // Notify an interest with a notification
-                $expo->notify( $interest_details[0], $notification );
+                try {
+                    $expo->notify( $interest_details[0], $notification );
+                } catch (Exception $e){
+                    dt_write_log( $e );
+                }
             }
         }
     }
