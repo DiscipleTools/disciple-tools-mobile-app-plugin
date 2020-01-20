@@ -235,6 +235,9 @@ class Jwt_Auth_Public
         if (!$auth) {
             $auth = isset(apache_request_headers()['Authorization']) ? apache_request_headers()['Authorization'] : false;
         }
+        if (!$auth) {
+            $auth = isset(apache_request_headers()['authorization']) ? apache_request_headers()['authorization'] : false;
+        }
 
         if (!$auth) {
             return new WP_Error(
