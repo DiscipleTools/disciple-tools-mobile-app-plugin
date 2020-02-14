@@ -1,23 +1,23 @@
 [
     {
         "name": "alymosul/exponent-server-sdk-php",
-        "version": "v1.1.2",
-        "version_normalized": "1.1.2.0",
+        "version": "1.2.0",
+        "version_normalized": "1.2.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/Alymosul/exponent-server-sdk-php.git",
-            "reference": "c3fec550e2c0c0e6dea94866a122c93d97915f03"
+            "reference": "e4e89b289ec37dc92e940d91d8f3eb33d7ffc2b2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Alymosul/exponent-server-sdk-php/zipball/c3fec550e2c0c0e6dea94866a122c93d97915f03",
-            "reference": "c3fec550e2c0c0e6dea94866a122c93d97915f03",
+            "url": "https://api.github.com/repos/Alymosul/exponent-server-sdk-php/zipball/e4e89b289ec37dc92e940d91d8f3eb33d7ffc2b2",
+            "reference": "e4e89b289ec37dc92e940d91d8f3eb33d7ffc2b2",
             "shasum": ""
         },
         "require": {
             "php": ">=7.0"
         },
-        "time": "2019-01-18T13:18:59+00:00",
+        "time": "2019-12-11T11:19:40+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -45,17 +45,17 @@
     },
     {
         "name": "dealerdirect/phpcodesniffer-composer-installer",
-        "version": "v0.5.0",
-        "version_normalized": "0.5.0.0",
+        "version": "v0.6.2",
+        "version_normalized": "0.6.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/Dealerdirect/phpcodesniffer-composer-installer.git",
-            "reference": "e749410375ff6fb7a040a68878c656c2e610b132"
+            "reference": "8001af8eb107fbfcedc31a8b51e20b07d85b457a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Dealerdirect/phpcodesniffer-composer-installer/zipball/e749410375ff6fb7a040a68878c656c2e610b132",
-            "reference": "e749410375ff6fb7a040a68878c656c2e610b132",
+            "url": "https://api.github.com/repos/Dealerdirect/phpcodesniffer-composer-installer/zipball/8001af8eb107fbfcedc31a8b51e20b07d85b457a",
+            "reference": "8001af8eb107fbfcedc31a8b51e20b07d85b457a",
             "shasum": ""
         },
         "require": {
@@ -68,7 +68,7 @@
             "phpcompatibility/php-compatibility": "^9.0",
             "sensiolabs/security-checker": "^4.1.0"
         },
-        "time": "2018-10-26T13:21:45+00:00",
+        "time": "2020-01-29T20:22:20+00:00",
         "type": "composer-plugin",
         "extra": {
             "class": "Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin"
@@ -113,17 +113,17 @@
     },
     {
         "name": "squizlabs/php_codesniffer",
-        "version": "3.5.1",
-        "version_normalized": "3.5.1.0",
+        "version": "3.5.4",
+        "version_normalized": "3.5.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-            "reference": "82cd0f854ceca17731d6d019c7098e3755c45060"
+            "reference": "dceec07328401de6211037abbb18bda423677e26"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/82cd0f854ceca17731d6d019c7098e3755c45060",
-            "reference": "82cd0f854ceca17731d6d019c7098e3755c45060",
+            "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/dceec07328401de6211037abbb18bda423677e26",
+            "reference": "dceec07328401de6211037abbb18bda423677e26",
             "shasum": ""
         },
         "require": {
@@ -135,7 +135,7 @@
         "require-dev": {
             "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0"
         },
-        "time": "2019-10-16T21:14:26+00:00",
+        "time": "2020-01-30T22:20:29+00:00",
         "bin": [
             "bin/phpcs",
             "bin/phpcbf"
@@ -166,17 +166,17 @@
     },
     {
         "name": "wp-coding-standards/wpcs",
-        "version": "2.1.1",
-        "version_normalized": "2.1.1.0",
+        "version": "2.2.1",
+        "version_normalized": "2.2.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/WordPress/WordPress-Coding-Standards.git",
-            "reference": "bd9c33152115e6741e3510ff7189605b35167908"
+            "reference": "b5a453203114cc2284b1a614c4953456fbe4f546"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/WordPress/WordPress-Coding-Standards/zipball/bd9c33152115e6741e3510ff7189605b35167908",
-            "reference": "bd9c33152115e6741e3510ff7189605b35167908",
+            "url": "https://api.github.com/repos/WordPress/WordPress-Coding-Standards/zipball/b5a453203114cc2284b1a614c4953456fbe4f546",
+            "reference": "b5a453203114cc2284b1a614c4953456fbe4f546",
             "shasum": ""
         },
         "require": {
@@ -184,14 +184,14 @@
             "squizlabs/php_codesniffer": "^3.3.1"
         },
         "require-dev": {
-            "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
+            "dealerdirect/phpcodesniffer-composer-installer": "^0.5 || ^0.6",
             "phpcompatibility/php-compatibility": "^9.0",
             "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0"
         },
         "suggest": {
-            "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0 || This Composer plugin will sort out the PHPCS 'installed_paths' automatically."
+            "dealerdirect/phpcodesniffer-composer-installer": "^0.6 || This Composer plugin will sort out the PHPCS 'installed_paths' automatically."
         },
-        "time": "2019-05-21T02:50:00+00:00",
+        "time": "2020-02-04T02:52:06+00:00",
         "type": "phpcodesniffer-standard",
         "installation-source": "dist",
         "notification-url": "https://packagist.org/downloads/",
@@ -201,7 +201,7 @@
         "authors": [
             {
                 "name": "Contributors",
-                "homepage": "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/graphs/contributors"
+                "homepage": "https://github.com/WordPress/WordPress-Coding-Standards/graphs/contributors"
             }
         ],
         "description": "PHP_CodeSniffer rules (sniffs) to enforce WordPress coding conventions",
