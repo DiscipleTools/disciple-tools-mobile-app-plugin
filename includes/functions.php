@@ -120,22 +120,30 @@ class DT_Mobile_App_Plugin_Functions
             if ( !$push_tokens ){
                 $push_tokens = [];
             }
+            $push_tokens = array_unique( $push_tokens );
             $expo = \ExponentPhpSDK\Expo::normalSetup();
+            $channel = $notification_type . $post_id . time();
             foreach ( $push_tokens as $token ){
-                $interest_details = [ $notification_type, $token ];
-
                 // Subscribe the recipient to the server
-                $expo->subscribe( $interest_details[0], $interest_details[1] );
+                $expo->subscribe( $channel, $token );
+            }
+            // Build the notification data
+            $notification = [ 'body' => $message ];
 
-                // Build the notification data
-                $notification = [ 'body' => $message ];
+            // Notify an interest with a notification
+            try {
 
-                // Notify an interest with a notification
-                try {
-                    $expo->notify( $interest_details[0], $notification );
-                } catch (Exception $e){
-                    dt_write_log( $e );
+                $response = $expo->notify( $channel, $notification );
+                if ( is_array( $response )){
+                    foreach ( $response as $index => $sent ) {
+                        if ( isset( $sent["status"], $sent["details"]["error"] ) && $sent["status"] === "error" && $sent["details"]["error"] === "DeviceNotRegistered" ){
+                            unset( $push_tokens[$index] );
+                            update_user_option( $user->ID, "dt_push_tokens", array_values( $push_tokens ) );
+                        }
+                    }
                 }
+            } catch (Exception $e){
+                dt_write_log( $e );
             }
         }
     }
