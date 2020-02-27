@@ -73,7 +73,7 @@ class DT_Mobile_App_Plugin_Functions
             if ( $push_tokens === false ){
                 $push_tokens = [];
             }
-            if ( !in_array( $push_tokens, $fields["add_push_token"] ) ) {
+            if ( !in_array( $fields["add_push_token"], $push_tokens ) ) {
                 $push_tokens[] = $fields["add_push_token"];
                 $update = update_user_option( $user->ID, "dt_push_tokens", $push_tokens );
                 if ( $update === false ){
