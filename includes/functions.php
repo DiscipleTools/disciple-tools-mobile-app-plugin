@@ -121,6 +121,9 @@ class DT_Mobile_App_Plugin_Functions
                 $push_tokens = [];
             }
             $push_tokens = array_unique( $push_tokens );
+            if ( empty( $push_tokens ) ) {
+                return;
+            }
             $expo = \ExponentPhpSDK\Expo::normalSetup();
             $channel = $notification_type . $post_id . time();
             foreach ( $push_tokens as $token ){
