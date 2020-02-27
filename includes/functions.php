@@ -111,7 +111,7 @@ class DT_Mobile_App_Plugin_Functions
     /**
      * Called when any notification is sent from the theme
      */
-    public static function send_notification_on_channels( $user_id, $notification, $notification_type, $post_id ){
+    public static function send_notification_on_channels( $user_id, $notification, $notification_type, $already_sent = [] ) {
         $user = get_user_by( "ID", $user_id );
         //if the user is receiving notifications of this type
         if ( $user && dt_user_notification_is_enabled( $notification_type, 'push_notifications', null, $user_id ) ) {
@@ -125,7 +125,7 @@ class DT_Mobile_App_Plugin_Functions
                 return;
             }
             $expo = \ExponentPhpSDK\Expo::normalSetup();
-            $channel = $notification_type . $post_id . time();
+            $channel = $notification_type . $user->ID . time();
             foreach ( $push_tokens as $token ){
                 // Subscribe the recipient to the server
                 $expo->subscribe( $channel, $token );
