@@ -80,6 +80,7 @@ class DT_Mobile_App {
      */
     public $token;
     public $version;
+    private $context = "dt_mobile_app_plugin";
     public $dir_path = '';
     public $dir_uri = '';
     public $img_uri = '';
@@ -114,9 +115,476 @@ class DT_Mobile_App {
      * @return void
      */
     private function __construct() {
+        $this->namespace = $this->context . "/v1";
+        add_action( 'rest_api_init', [ $this, 'add_api_routes' ] );
         add_action( 'admin_notices', [ $this, 'mobile_app_error' ] );
     }
 
+    public function add_api_routes(){
+
+        register_rest_route(
+            $this->namespace, '/contacts', [
+                "methods"  => "GET",
+                "callback" => [ $this, 'get_contacts' ],
+            ]
+        );
+
+        register_rest_route(
+            $this->namespace, '/groups', [
+                "methods"  => "GET",
+                "callback" => [ $this, 'get_groups' ],
+            ]
+        );
+
+        register_rest_route(
+            $this->namespace, '/users', [
+                "methods"  => "GET",
+                "callback" => [ $this, 'get_users' ],
+            ]
+        );
+
+        register_rest_route(
+            $this->namespace, '/people-groups', [
+                "methods"  => "GET",
+                "callback" => [ $this, 'get_people_groups' ],
+            ]
+        );
+
+        register_rest_route(
+            $this->namespace, '/locations', [
+                "methods"  => "GET",
+                "callback" => [ $this, 'get_locations' ],
+            ]
+        );
+
+    }
+
+    /**
+     * @param WP_REST_Request $request
+     *
+     * @return array|WP_Query
+     */
+    public function get_contacts( WP_REST_Request $request ) {
+        //$contacts = DT_Posts::get_viewable_compact( 'contacts', $search );
+        return $this->get_viewable( 'contacts' );
+    }
+
+    /**
+     * @param WP_REST_Request $request
+     *
+     * @return array|WP_Query
+     */
+    public function get_groups( WP_REST_Request $request ) {
+        //$contacts = DT_Posts::get_viewable_compact( 'groups', $search );
+        return $this->get_viewable( 'groups' );
+    }
+
+    /**
+     * @param string $post_type
+     *
+     * @return bool
+     */
+    private function can_access( string $post_type ) {
+        return current_user_can( "access_" . $post_type );
+    }
+
+    /**
+     * @param string $post_type
+     *
+     * @return bool
+     */
+    public static function can_view_all( string $post_type ) {
+        return current_user_can( "view_any_" . $post_type );
+    }
+
+    /**
+     * @param string $post_type
+     * @param int    $user_id
+     *
+     * @return array
+     */
+    public static function get_posts_shared_with_user( string $post_type, int $user_id, $search_for_post_name = '' ) {
+        global $wpdb;
+        $shares = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT *
+                FROM $wpdb->dt_share as shares
+                INNER JOIN $wpdb->posts as posts
+                WHERE user_id = %d
+                AND posts.post_title LIKE %s
+                AND shares.post_id = posts.ID
+                AND posts.post_type = %s
+                AND posts.post_status = 'publish'",
+                $user_id,
+                "%$search_for_post_name%",
+                $post_type
+            ),
+            OBJECT
+        );
+        return $shares;
+    }
+
+    /**
+     * Get viewable in compact form
+     *
+     * @param string $post_type
+     *
+     * @return array|WP_Error|WP_Query
+     */
+    private function get_viewable( string $post_type ) {
+        if ( !$this->can_access( $post_type ) ) {
+            return new WP_Error( __FUNCTION__, sprintf( "You do not have access to these %s", $post_type ), [ 'status' => 403 ] );
+        }
+        global $wpdb;
+        $current_user = wp_get_current_user();
+        $compact = [];
+        //$search_string = esc_sql( sanitize_text_field( $search_string ) );
+        $shared_with_user = [];
+        $users_interacted_with =[];
+
+        $send_quick_results = false;
+        //find the most recent posts interacted with by the user
+        $posts = $wpdb->get_results( $wpdb->prepare( "
+            SELECT *, statusReport.meta_value as overall_status, pm.meta_value as corresponds_to_user
+            FROM $wpdb->posts p
+            LEFT JOIN $wpdb->postmeta statusReport ON ( statusReport.post_id = p.ID AND statusReport.meta_key = 'overall_status')
+            LEFT JOIN $wpdb->postmeta pm ON ( pm.post_id = p.ID AND pm.meta_key = 'corresponds_to_user' )
+            WHERE p.post_type = %s AND (p.post_status = 'publish' OR p.post_status = 'private')
+        ", $current_user->ID, $post_type ), OBJECT );
+        if ( !empty( $posts ) ){
+            $send_quick_results = true;
+        }
+        if ( !$send_quick_results ){
+            if ( !$this->can_view_all( $post_type ) ) {
+                //@todo better way to get the contact records for users my contacts are shared with
+                $shared_with_user = $this->get_posts_shared_with_user( $post_type, $current_user->ID );
+                $query_args['meta_key'] = 'assigned_to';
+                $query_args['meta_value'] = "user-" . $current_user->ID;
+                $posts = $wpdb->get_results( $wpdb->prepare( "
+                    SELECT *, statusReport.meta_value as overall_status, pm.meta_value as corresponds_to_user 
+                    FROM $wpdb->posts
+                    INNER JOIN $wpdb->postmeta as assigned_to ON ( $wpdb->posts.ID = assigned_to.post_id AND assigned_to.meta_key = 'assigned_to')
+                    LEFT JOIN $wpdb->postmeta statusReport ON ( statusReport.post_id = $wpdb->posts.ID AND statusReport.meta_key = 'overall_status')
+                    LEFT JOIN $wpdb->postmeta pm ON ( pm.post_id = $wpdb->posts.ID AND pm.meta_key = 'corresponds_to_user' )
+                    WHERE assigned_to.meta_value = %s
+                    AND $wpdb->posts.post_type = %s AND ($wpdb->posts.post_status = 'publish' OR $wpdb->posts.post_status = 'private')
+                ", "user-". $current_user->ID, $post_type), OBJECT );
+            } else {
+                $posts = $wpdb->get_results( $wpdb->prepare( "
+                    SELECT ID, post_title, pm.meta_value as corresponds_to_user, statusReport.meta_value as overall_status
+                    FROM $wpdb->posts p
+                    LEFT JOIN $wpdb->postmeta pm ON ( pm.post_id = p.ID AND pm.meta_key = 'corresponds_to_user' )
+                    LEFT JOIN $wpdb->postmeta statusReport ON ( statusReport.post_id = p.ID AND statusReport.meta_key = 'overall_status')
+                    WHERE p.ID IN ( SELECT ID FROM $wpdb->posts )
+                    AND p.post_type = %s AND (p.post_status = 'publish' OR p.post_status = 'private')
+                ", $post_type), OBJECT );
+            }
+        }
+        if ( is_wp_error( $posts ) ) {
+            return $posts;
+        }
+
+        $post_ids = array_map(
+            function( $post ) {
+                return $post->ID;
+            },
+            $posts
+        );
+        if ( $post_type === 'contacts' && !$this->can_view_all( $post_type ) && sizeof( $posts ) < 30 ) {
+            //$users_interacted_with = Disciple_Tools_Users::get_assignable_users_compact( $search_string );
+            $users_interacted_with = $this->get_assignable_users();
+            foreach ( $users_interacted_with as $user ) {
+                $post_id = $this->get_contact_for_user( $user["ID"] );
+                if ( $post_id ){
+                    if ( !in_array( $post_id, $post_ids ) ) {
+                        $compact[] = [
+                            "ID" => $post_id,
+                            "name" => $user["name"],
+                            "user" => true
+                        ];
+                    }
+                }
+            }
+        }
+        foreach ( $shared_with_user as $shared ) {
+            if ( !in_array( $shared->ID, $post_ids ) ) {
+                $compact[] = [
+                    "ID" => $shared->ID,
+                    "name" => $shared->post_title
+                ];
+            }
+        }
+        foreach ( $posts as $post ) {
+            $compact[] = [
+                "ID" => $post->ID,
+                "name" => $post->post_title,
+                "user" => $post->corresponds_to_user >= 1,
+                "status" => $post->overall_status
+            ];
+        }
+
+        return [
+            "total" => sizeof( $compact ),
+            "posts" => $compact
+        ];
+    }
+
+    /**
+     * @param \WP_REST_Request $request
+     *
+     * @return array|\WP_Error
+     */
+    public function get_users( WP_REST_Request $request ) {
+        //$users = Disciple_Tools_Users::get_assignable_users_compact( $search, $get_all );
+        return $this->get_assignable_users();
+    }
+
+    /**
+     * Get viewable in compact form
+     *
+     * @param string $post_type
+     *
+     * @return array|WP_Error|WP_Query
+     */
+    private function get_assignable_users() {
+        if ( !current_user_can( "access_contacts" ) ) {
+            return new WP_Error( __FUNCTION__, __( "No permissions to assign" ), [ 'status' => 403 ] );
+        }
+
+        global $wpdb;
+        $user_id = get_current_user_id();
+        $users = [];
+        $update_needed = [];
+        if ( !user_can( get_current_user_id(), 'view_any_contacts' ) ){
+            // users that are shared posts that are shared with me
+            $users_ids = $wpdb->get_results( $wpdb->prepare("
+                SELECT user_id
+                FROM $wpdb->dt_share
+                WHERE post_id IN (
+                      SELECT post_id
+                      FROM $wpdb->dt_share
+                      WHERE user_id = %1\$s
+                )
+                GROUP BY user_id
+                ",
+                $user_id
+            ), ARRAY_N );
+
+            $dispatchers = $wpdb->get_results("
+                SELECT user_id FROM $wpdb->usermeta 
+                WHERE meta_key = '{$wpdb->prefix}capabilities' 
+                AND meta_value LIKE '%dispatcher%'
+            ");
+
+            $assure_unique = [];
+            foreach ( $dispatchers as $index ){
+                $id = $index->user_id;
+                if ( $id && !in_array( $id, $assure_unique )){
+                    $assure_unique[] = $id;
+                    $users[] = get_user_by( "ID", $id );
+                }
+            }
+            foreach ( $users_ids as $index ){
+                $id = $index[0];
+                if ( $id && !in_array( $id, $assure_unique )){
+                    $assure_unique[] = $id;
+                    $users[] = get_user_by( "ID", $id );
+                }
+            }
+        } else {
+
+            $search_string = esc_attr( $search_string );
+            $user_query = new WP_User_Query( array( 'blog_id' => 0 ) );
+            $users = $user_query->get_results();
+
+            //used cached updated needed data if available
+            //@todo refresh the cache if not available
+            $dispatcher_user_data = get_transient( 'dispatcher_user_data' );
+            if ( $dispatcher_user_data ){
+                foreach ( maybe_unserialize( $dispatcher_user_data ) as $uid => $val ){
+                    $update_needed['user-' . $uid] = $val["number_update"];
+                }
+            } else {
+                $ids = [];
+                foreach ( $users as $a ){
+                    $ids[] = 'user-' . $a->ID;
+                }
+                $user_ids = dt_array_to_sql( $ids );
+                //phpcs:disable
+                $update_needed_result = $wpdb->get_results("
+                    SELECT pm.meta_value, COUNT(update_needed.post_id) as count
+                    FROM $wpdb->postmeta pm
+                    INNER JOIN $wpdb->postmeta as update_needed on (update_needed.post_id = pm.post_id and update_needed.meta_key = 'requires_update' and update_needed.meta_value = '1' )
+                    WHERE pm.meta_key = 'assigned_to' and pm.meta_value IN ( $user_ids )
+                    GROUP BY pm.meta_value
+                ", ARRAY_A );
+                //phpcs:enable
+                foreach ( $update_needed_result as $up ){
+                    $update_needed[$up["meta_value"]] = $up["count"];
+                }
+            }
+        }
+        $list = [];
+
+        $workload_status_options = dt_get_site_custom_lists()["user_workload_status"] ?? [];
+
+        foreach ( $users as $user ) {
+            if ( user_can( $user, "access_contacts" ) ) {
+                $u = [
+                    "name" => $user->display_name,
+                    "ID"   => $user->ID,
+                    "avatar" => get_avatar_url( $user->ID, [ 'size' => '16' ] ),
+                    "contact_id" => $this->get_contact_for_user( $user->ID )
+                ];
+                //extra information for the dispatcher
+                if ( current_user_can( 'view_any_contacts' )) { // && !$get_all ){
+                    $workload_status = get_user_option( 'workload_status', $user->ID );
+                    if ( $workload_status && isset( $workload_status_options[ $workload_status ]["color"] ) ) {
+                        $u['status_color'] = $workload_status_options[$workload_status]["color"];
+                    }
+                    $u["update_needed"] = $update_needed['user-' . $user->ID] ?? 0;
+                }
+                $list[] = $u;
+            }
+        }
+
+        function asc_meth( $a, $b ) {
+            $a["name"] = strtolower( $a["name"] );
+            $b["name"] = strtolower( $b["name"] );
+            return strcmp( $a["name"], $b["name"] );
+        }
+
+        usort( $list, "asc_meth" );
+        return $list;
+    }
+
+    /**
+     * @param $user->ID
+     *
+     * @return $contacts->post->ID|null
+     */
+    private static function get_contact_for_user( $user_id ){
+        if ( !current_user_can( "access_contacts" )){
+            return new WP_Error( 'no_permission', __( "Insufficient permissions" ), [ 'status' => 403 ] );
+        }
+        $contact_id = get_user_option( "corresponds_to_contact", $user_id );
+        if ( !empty( $contact_id )){
+            return $contact_id;
+        }
+        $args = [
+            'post_type'  => 'contacts',
+            'relation'   => 'AND',
+            'meta_query' => [
+                [
+                    'key' => "corresponds_to_user",
+                    "value" => $user_id
+                ],
+                [
+                    'key' => "type",
+                    "value" => "user"
+                ],
+            ],
+        ];
+        $contacts = new WP_Query( $args );
+        if ( isset( $contacts->post->ID ) ){
+            update_user_option( $user_id, "corresponds_to_contact", $contacts->post->ID );
+            return $contacts->post->ID;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param \WP_REST_Request $request
+     *
+     * @return array|WP_Error
+     */
+    public function get_people_groups( WP_REST_Request $request ) {
+        if ( !current_user_can( "access_contacts" )){
+            return new WP_Error( __FUNCTION__, "You do not have permission for this", [ 'status' => 403 ] );
+        }
+        //$people_groups = Disciple_Tools_people_groups::get_people_groups_compact( $search );
+        global $wpdb;
+        $locale = get_user_locale();
+        $query_args = [
+            'post_type' => 'peoplegroups',
+            'nopaging'  => true,
+        ];
+        $query = new WP_Query( $query_args );
+        $list = [];
+        foreach ( $query->posts as $post ) {
+            $translation = get_post_meta( $post->ID, $locale, true );
+            if ($translation !== "") {
+                $label = $translation;
+            } else {
+                $label = $post->post_title;
+            }
+
+            $list[] = [
+            "ID" => $post->ID,
+            "name" => $post->post_title,
+            "label" => $label
+            ];
+        }
+        $meta_query_args = [
+            'post_type' => 'peoplegroups',
+            'nopaging'  => true,
+            'meta_query' => array(
+                array(
+                    'key' => $locale
+                )
+            ),
+        ];
+
+        $meta_query = new WP_Query( $meta_query_args );
+        foreach ( $meta_query->posts as $post ) {
+            $translation = get_post_meta( $post->ID, $locale, true );
+            if ($translation !== "") {
+                $label = $translation;
+            } else {
+                $label = $post->post_title;
+            }
+            $list[] = [
+            "ID" => $post->ID,
+            "name" => $post->post_title,
+            "label" => $label
+            ];
+        }
+
+        $total_found_posts = $query->found_posts + $meta_query->found_posts;
+
+        return [
+        "total" => $total_found_posts,
+        "posts" => $list
+        ];
+    }
+
+    /**
+     * @param \WP_REST_Request $request
+     *
+     * @return array|WP_Error
+     */
+    public function get_locations( WP_REST_Request $request ) {
+        if ( !user_can( get_current_user_id(), 'manage_dt' ) ) {
+            return new WP_Error( __METHOD__, "Unable to retrieve the data.", array( 'status' => 400 ) );
+        }
+        global $wpdb;
+        // phpcs:disable
+        // WordPress.WP.PreparedSQL.NotPrepared
+        $results = $wpdb->get_results("
+                            SELECT grid_id, alt_name
+                            FROM $wpdb->dt_location_grid
+                        ", ARRAY_A );
+        // phpcs:enable
+        $prepared = [];
+        foreach ( $results as $row ){
+            $prepared[$row["grid_id"]] = $row["alt_name"];
+        }
+        return [
+            'location_grid' => $prepared, //$location_grid,
+            'total' => count($results)
+        ];
+    }
 
     public function mobile_app_error() {
         if ( $this->show_jwt_error ){
