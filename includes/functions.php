@@ -73,12 +73,16 @@ class DT_Mobile_App_Plugin_Functions
             if ( $push_tokens === false ){
                 $push_tokens = [];
             }
-            if ( !in_array( $fields["add_push_token"], $push_tokens ) ) {
-                $push_tokens[] = $fields["add_push_token"];
+            if ( isset( $fields["add_push_token"]["token"], $fields["add_push_token"]["device_id"] ) ){
+                $push_tokens[$fields["add_push_token"]["device_id"]] = [
+                    "token" => $fields["add_push_token"]["token"]
+                ];
                 $update = update_user_option( $user->ID, "dt_push_tokens", $push_tokens );
                 if ( $update === false ){
                     throw new Exception( 'Something went wrong updating the push notification token', 500 );
                 }
+            } else {
+                throw new Exception( 'Required "token" and "device_id" field', 400 );
             }
         }
         if ( isset( $fields["remove_push_token"] ) ) {
@@ -86,12 +90,9 @@ class DT_Mobile_App_Plugin_Functions
             if ( $push_tokens === false ){
                 $push_tokens = [];
             }
-            $index = array_search( $fields["remove_push_token"], $push_tokens );
-            if ( $index !== false ){
-                unset( $push_tokens[$index] );
+            if ( isset( $fields["add_push_token"]["token"], $fields["add_push_token"]["device_id"] ) && isset( $push_tokens[$fields["add_push_token"]["device_id"]] ) ) {
+                unset( $push_tokens[$fields["add_push_token"]["device_id"]] );
                 update_user_option( $user->ID, "dt_push_tokens", $push_tokens );
-            } else {
-                throw new Exception( 'Token not found', 400 );
             }
         }
     }
@@ -120,15 +121,22 @@ class DT_Mobile_App_Plugin_Functions
             if ( !$push_tokens ){
                 $push_tokens = [];
             }
-            $push_tokens = array_unique( $push_tokens );
+            //make sure we don't have old format
+            foreach ( $push_tokens as $device_id => $value ){
+                if ( is_numeric( $device_id ) ){
+                    unset( $push_tokens[$device_id] );
+                }
+            };
             if ( empty( $push_tokens ) ) {
                 return;
             }
             $expo = \ExponentPhpSDK\Expo::normalSetup();
             $channel = $notification_type . $user->ID . time();
-            foreach ( $push_tokens as $token ){
+            foreach ( $push_tokens as $device_id => $value ){
                 // Subscribe the recipient to the server
-                $expo->subscribe( $channel, $token );
+                if ( isset( $value["token"] ) ) {
+                    $expo->subscribe( $channel, $value["token"] );
+                }
             }
             // Build the notification data
             $notification = [ 'body' => $message ];
