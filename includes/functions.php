@@ -90,8 +90,8 @@ class DT_Mobile_App_Plugin_Functions
             if ( $push_tokens === false ){
                 $push_tokens = [];
             }
-            if ( isset( $fields["add_push_token"]["token"], $fields["add_push_token"]["device_id"] ) && isset( $push_tokens[$fields["add_push_token"]["device_id"]] ) ) {
-                unset( $push_tokens[$fields["add_push_token"]["device_id"]] );
+            if ( isset( $fields["remove_push_token"]["device_id"] ) && isset( $push_tokens[$fields["remove_push_token"]["device_id"]] ) ) {
+                unset( $push_tokens[$fields["remove_push_token"]["device_id"]] );
                 update_user_option( $user->ID, "dt_push_tokens", $push_tokens );
             }
         }
@@ -125,6 +125,7 @@ class DT_Mobile_App_Plugin_Functions
             foreach ( $push_tokens as $device_id => $value ){
                 if ( is_numeric( $device_id ) ){
                     unset( $push_tokens[$device_id] );
+                    update_user_option( $user->ID, "dt_push_tokens", $push_tokens );
                 }
             };
             if ( empty( $push_tokens ) ) {
@@ -148,13 +149,21 @@ class DT_Mobile_App_Plugin_Functions
                 if ( is_array( $response )){
                     foreach ( $response as $index => $sent ) {
                         if ( isset( $sent["status"], $sent["details"]["error"] ) && $sent["status"] === "error" && $sent["details"]["error"] === "DeviceNotRegistered" ){
-                            unset( $push_tokens[$index] );
-                            update_user_option( $user->ID, "dt_push_tokens", array_values( $push_tokens ) );
+                            foreach ( array_keys( $push_tokens ) as $key_index => $key ){
+                                if ( $index === $key_index ){
+                                    unset( $push_tokens[$key] );
+                                    update_user_option( $user->ID, "dt_push_tokens", $push_tokens );
+                                }
+                            }
                         }
                     }
                 }
-            } catch (Exception $e){
+            } catch (ExponentPhpSDK\Exceptions\ExpoException $e){
                 dt_write_log( $e );
+                //if the notification fails completely and the device is no longer registered, remove the token.
+                if ( $e->getMessage() === "The recipient device is not registered with FCM." ){
+                    update_user_option( $user->ID, "dt_push_tokens", [] );
+                }
             }
         }
     }
