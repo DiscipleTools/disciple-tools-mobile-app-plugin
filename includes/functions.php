@@ -46,21 +46,31 @@ class DT_Mobile_App_Plugin_Functions
                 $counts = $this->get_group_baptized( $g["ID"] );
                 $g["baptized_member_count"] = $counts["baptized"];
                 $g["member_count"] = $counts["member_count"];
+                $g["is_church"] = $this->is_church( $g["ID"] );
             }
             foreach ( $fields["child_groups"] as &$g ){
                 $counts = $this->get_group_baptized( $g["ID"] );
                 $g["baptized_member_count"] = $counts["baptized"];
                 $g["member_count"] = $counts["member_count"];
+                $g["is_church"] = $this->is_church( $g["ID"] );
             }
             foreach ( $fields["peer_groups"] as &$g ){
                 $counts = $this->get_group_baptized( $g["ID"] );
                 $g["baptized_member_count"] = $counts["baptized"];
                 $g["member_count"] = $counts["member_count"];
+                $g["is_church"] = $this->is_church( $g["ID"] );
             }
         }
 
         return $fields;
     }
+
+    private function is_church( $post_id ){
+        $health_metrics = get_post_meta( $post_id, 'health_metrics' );
+        $group_type = get_post_meta( $post_id, 'group_type', true );
+        return $group_type === "church" || in_array( 'church_commitment', $health_metrics );
+    }
+
 
     public function include_fields_in_login_endpoint( $data, $user ){
         $data["locale"] = get_user_locale( $user->ID );
