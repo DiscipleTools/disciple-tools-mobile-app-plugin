@@ -33,7 +33,7 @@ class DT_Mobile_App_Endpoints
 
 
     public function add_api_routes(){
-        $namespace = 'dt-mobile-app/v1/';
+        $namespace = 'dt-mobile-app/v1';
 
         register_rest_route(
             $namespace, 'location-data', [
