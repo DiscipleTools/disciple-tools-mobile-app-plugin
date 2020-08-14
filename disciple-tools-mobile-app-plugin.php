@@ -3,7 +3,7 @@
  * Plugin Name: Disciple Tools - Mobile App Extension
  * Plugin URI: https://github.com/DiscipleTools/disciple-tools-mobile-app-plugin
  * Description: Disciple Tools - Mobile App Extension supports integration with the disciple tools mobile app
- * Version:  v1.7
+ * Version:  v1.8
  * Author URI: https://github.com/DiscipleTools
  * GitHub Plugin URI: https://github.com/DiscipleTools/disciple-tools-mobile-app-plugin
  * Requires at least: 4.7.0
@@ -167,7 +167,7 @@ class DT_Mobile_App {
 
         // Admin and settings variables
         $this->token             = 'dt_mobile_app';
-        $this->version             = 'v1.7';
+        $this->version             = 'v1.8';
 
         // sample rest api class
         require_once( 'includes/rest-api.php' );

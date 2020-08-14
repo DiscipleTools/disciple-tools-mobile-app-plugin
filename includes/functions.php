@@ -26,7 +26,7 @@ class DT_Mobile_App_Plugin_Functions
         $member_count = get_post_meta( $group_id, "member_count", true );
         global $wpdb;
         $baptized = $wpdb->get_var( $wpdb->prepare( "
-            SELECT COUNT(*) 
+            SELECT COUNT(*)
             FROM $wpdb->p2p as p2p
             INNER JOIN $wpdb->postmeta pm ON ( p2p.p2p_from = pm.post_id AND pm.meta_key = 'milestones' )
             WHERE p2p_type = 'contacts_to_groups' and p2p_to = %s
@@ -154,7 +154,6 @@ class DT_Mobile_App_Plugin_Functions
 
             // Notify an interest with a notification
             try {
-
                 $response = $expo->notify( $channel, $notification );
                 if ( is_array( $response )){
                     foreach ( $response as $index => $sent ) {
@@ -174,6 +173,10 @@ class DT_Mobile_App_Plugin_Functions
                 if ( $e->getMessage() === "The recipient device is not registered with FCM." ){
                     update_user_option( $user->ID, "dt_push_tokens", [] );
                 }
+            } catch ( ExponentPhpSDK\Exceptions\UnexpectedResponseException $e ){
+                dt_write_log( $e );
+            } catch ( Exception $e ){
+                dt_write_log( $e );
             }
         }
     }
