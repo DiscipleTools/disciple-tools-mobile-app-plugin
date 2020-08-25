@@ -233,10 +233,10 @@ class Jwt_Auth_Public
             $auth = isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION']) ? $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] : false;
         }
         if (!$auth) {
-            $auth = isset(apache_request_headers()['Authorization']) ? apache_request_headers()['Authorization'] : false;
+            $auth = ( function_exists( "apache_request_headers" ) && isset(apache_request_headers()['Authorization']) ) ? apache_request_headers()['Authorization'] : false;
         }
         if (!$auth) {
-            $auth = isset(apache_request_headers()['authorization']) ? apache_request_headers()['authorization'] : false;
+            $auth = ( function_exists( "apache_request_headers" ) && isset(apache_request_headers()['authorization']) ) ? apache_request_headers()['authorization'] : false;
         }
 
         if (!$auth) {
