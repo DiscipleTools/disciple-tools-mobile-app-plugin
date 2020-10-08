@@ -146,7 +146,19 @@ class DT_Mobile_App_Plugin_Functions
             foreach ( $push_tokens as $device_id => $value ){
                 // Subscribe the recipient to the server
                 if ( isset( $value["token"] ) ) {
-                    $expo->subscribe( $channel, $value["token"] );
+                    try {
+                        $expo->subscribe( $channel, $value["token"] );
+                    } catch ( ExponentPhpSDK\Exceptions\ExpoRegistrarException $e ){
+                        if ( $e->getCode() === 422 ){
+                            unset( $push_tokens[$device_id] );
+                            update_user_option( $user->ID, "dt_push_tokens", $push_tokens );
+                        }
+                        if ( $e->getMessage() === "Could not register the token provided for the interest, due to internal error." ){
+                            dt_write_log( $e );
+                        }
+                    } catch ( Exception $e ){
+                        dt_write_log( $e );
+                    }
                 }
             }
             // Build the notification data
