@@ -155,6 +155,7 @@ class DT_Mobile_App_Plugin_Functions
                         }
                         if ( $e->getMessage() === "Could not register the token provided for the interest, due to internal error." ){
                             dt_write_log( $e );
+                            return;
                         }
                     } catch ( Exception $e ){
                         dt_write_log( $e );
