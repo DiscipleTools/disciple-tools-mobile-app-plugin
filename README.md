@@ -26,6 +26,14 @@ Or with:
 SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
 ```
 
+## Known Issues
+
+We have observed conflicts when certain other plugins are installed which prevent the D.T Mobile App plugin from operating as expected.  The following plugins and hosts have been observed to have issues:
+
+- `JetPack` multiple versions on multiple hosting providers and even self-hosted
+- `Creative Mail by Constant Contact` v1.2.1 on Bluehost
+
+There will also be a conflict if you're also using another JWT Token provider plugin like: https://wordpress.org/plugins/jwt-authentication-for-wp-rest-api/
 
 ## Basic Design Idea
 ![Basic Design Idea](https://github.com/DiscipleTools/disciple-tools-mobile-app-plugin/raw/master/mobile-app-design.png)
