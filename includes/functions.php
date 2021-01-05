@@ -22,12 +22,10 @@ class DT_Mobile_App_Plugin_Functions
     }
 
     public function dt_post_type_modules( $modules ){
-        if ( isset( $modules["access_module"] ) ){
-            $modules["access_module"]["enabled"] = true;
+        if ( isset( $modules["access_module"] ) && !empty( $modules["access_module"]["enabled"] ) ){
             $modules["access_module"]["locked"] = true;
         }
-        if ( isset( $modules["dmm_module"] ) ){
-            $modules["dmm_module"]["enabled"] = true;
+        if ( isset( $modules["dmm_module"] ) && !empty( $modules["dmm_module"]["enabled"] ) ){
             $modules["dmm_module"]["locked"] = true;
         }
         return $modules;
