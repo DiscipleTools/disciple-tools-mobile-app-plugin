@@ -18,10 +18,10 @@ class DT_Mobile_App_Plugin_Functions
         add_action( 'dt_get_site_notification_options', [ $this, "dt_get_site_notification_options" ], 10, 1 );
         add_action( 'send_notification_on_channels', [ $this, "send_notification_on_channels" ], 20, 4 );
 
-        add_filter( 'dt_post_type_modules', [ $this, 'dt_post_type_modules' ], 1000, 1 );
+        add_filter( 'dt_post_type_modules_after', [ $this, 'dt_post_type_modules_after' ], 1000, 1 );
     }
 
-    public function dt_post_type_modules( $modules ){
+    public function dt_post_type_modules_after( $modules ){
         if ( isset( $modules["access_module"] ) && !empty( $modules["access_module"]["enabled"] ) ){
             $modules["access_module"]["locked"] = true;
         }
