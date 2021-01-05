@@ -17,6 +17,20 @@ class DT_Mobile_App_Plugin_Functions
         add_action( 'dt_update_user', [ $this, 'dt_update_user' ], 10, 2 );
         add_action( 'dt_get_site_notification_options', [ $this, "dt_get_site_notification_options" ], 10, 1 );
         add_action( 'send_notification_on_channels', [ $this, "send_notification_on_channels" ], 20, 4 );
+
+        add_filter( 'dt_post_type_modules', [ $this, 'dt_post_type_modules' ], 1000, 1 );
+    }
+
+    public function dt_post_type_modules( $modules ){
+        if ( isset( $modules["access_module"] ) ){
+            $modules["access_module"]["enabled"] = true;
+            $modules["access_module"]["locked"] = true;
+        }
+        if ( isset( $modules["dmm_module"] ) ){
+            $modules["dmm_module"]["enabled"] = true;
+            $modules["dmm_module"]["locked"] = true;
+        }
+        return $modules;
     }
 
     private function get_group_baptized( $group_id ){
