@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => 'b86b3fa98e5e69c4eab740341f9d17535dd56059',
+    'reference' => '1610801d55538068f5777a20372d8432e058c94e',
     'name' => '__root__',
   ),
   'versions' => 
@@ -18,7 +18,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => 'b86b3fa98e5e69c4eab740341f9d17535dd56059',
+      'reference' => '1610801d55538068f5777a20372d8432e058c94e',
     ),
     'alymosul/exponent-server-sdk-php' => 
     array (
