@@ -19,7 +19,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '776ed02fcaeedd6c480f6aa8d9e209b01363b283',
+    'reference' => 'b86b3fa98e5e69c4eab740341f9d17535dd56059',
     'name' => '__root__',
   ),
   'versions' => 
@@ -31,7 +31,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '776ed02fcaeedd6c480f6aa8d9e209b01363b283',
+      'reference' => 'b86b3fa98e5e69c4eab740341f9d17535dd56059',
     ),
     'alymosul/exponent-server-sdk-php' => 
     array (

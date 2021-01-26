@@ -43,6 +43,10 @@
                 "notifications",
                 "push"
             ],
+            "support": {
+                "issues": "https://github.com/Alymosul/exponent-server-sdk-php/issues",
+                "source": "https://github.com/Alymosul/exponent-server-sdk-php/tree/master"
+            },
             "install-path": "../alymosul/exponent-server-sdk-php"
         },
         {
