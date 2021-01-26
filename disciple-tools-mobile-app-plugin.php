@@ -3,7 +3,7 @@
  * Plugin Name: Disciple Tools - Mobile App Extension
  * Plugin URI: https://github.com/DiscipleTools/disciple-tools-mobile-app-plugin
  * Description: Disciple Tools - Mobile App Extension supports integration with the disciple tools mobile app
- * Version:  v1.9
+ * Version:  v1.10
  * Author URI: https://github.com/DiscipleTools
  * GitHub Plugin URI: https://github.com/DiscipleTools/disciple-tools-mobile-app-plugin
  * Requires at least: 4.7.0
@@ -28,7 +28,7 @@ if ( ! class_exists( 'Jwt_Auth' ) ) {
     $class_already_loaded = true;
 }
 
-$dt_mobile_app_required_dt_theme_version = '0.1.0';
+$dt_mobile_app_required_dt_theme_version = '1.0.0';
 
 /**
  * Gets the instance of the `DT_Mobile_App` class.
