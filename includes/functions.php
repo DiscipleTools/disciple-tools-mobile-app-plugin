@@ -159,7 +159,11 @@ class DT_Mobile_App_Plugin_Functions
                 // Subscribe the recipient to the server
                 if ( isset( $value["token"] ) ) {
                     try {
-                        $expo->subscribe( $channel, $value["token"] );
+                        if ( is_string( $value["token"] ) ) {
+                            $expo->subscribe( $channel, $value["token"] );
+                        } else if ( is_array( $value["token"] ) && array_key_exists( "data", $value["token"] ) ) {
+                            $expo->subscribe( $channel, $value["token"]["data"] );
+                        }
                     } catch ( ExponentPhpSDK\Exceptions\ExpoRegistrarException $e ){
                         if ( $e->getCode() === 422 ){
                             unset( $push_tokens[$device_id] );
