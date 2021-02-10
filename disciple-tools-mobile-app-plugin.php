@@ -61,7 +61,7 @@ function dt_mobile_app() {
     }
     return DT_Mobile_App::get_instance();
 }
-add_action( 'plugins_loaded', 'dt_mobile_app' );
+add_action( 'after_setup_theme', 'dt_mobile_app' );
 
 /**
  * Singleton class for setting up the plugin.
