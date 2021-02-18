@@ -358,7 +358,7 @@ add_action( 'plugins_loaded', function (){
         }
         if ( class_exists( 'Puc_v4_Factory' ) ){
             Puc_v4_Factory::buildUpdateChecker(
-                'https://raw.githubusercontent.com/DiscipleTools/disciple-tools-version-control/master/disciple-tools-mobile-app-plugin-version-control.json',
+                'https://raw.githubusercontent.com/DiscipleTools/disciple-tools-mobile-app-plugin/master/version-control.json',
                 __FILE__,
                 'disciple-tools-mobile-app-plugin'
             );
