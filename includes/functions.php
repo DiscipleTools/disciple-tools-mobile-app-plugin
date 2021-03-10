@@ -186,6 +186,9 @@ class DT_Mobile_App_Plugin_Functions
                 $response = $expo->notify( $channel, $notification );
                 if ( is_array( $response )){
                     foreach ( $response as $index => $sent ) {
+                        if ( isset( $sent["status"] ) && $sent["status"] === "error" ){
+                            dt_write_log( $response );
+                        }
                         if ( isset( $sent["status"], $sent["details"]["error"] ) && $sent["status"] === "error" && $sent["details"]["error"] === "DeviceNotRegistered" ){
                             foreach ( array_keys( $push_tokens ) as $key_index => $key ){
                                 if ( $index === $key_index ){
