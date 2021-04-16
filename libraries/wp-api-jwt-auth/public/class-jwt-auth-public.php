@@ -199,6 +199,10 @@ class Jwt_Auth_Public
 
         $token = $this->validate_token(false);
 
+        if ( empty( $token ) ){
+            return $user;
+        }
+
         if (is_wp_error($token)) {
             if ($token->get_error_code() != 'jwt_auth_no_auth_header' && $token->get_error_code() != 'jwt_auth_bad_auth_header' && $token->get_error_code() != 'jwt_auth_invalid_token' ) {
                 /** If there is a error, store it to show it after see rest_pre_dispatch */
@@ -218,7 +222,7 @@ class Jwt_Auth_Public
      *
      * @param bool $output
      *
-     * @return WP_Error | Object | Array
+     * @return WP_Error | Object | Array | Bool
      */
     public function validate_token($output = true)
     {
@@ -248,6 +252,7 @@ class Jwt_Auth_Public
 //                    'status' => 403,
 //                )
 //            );
+            return false;
         }
 
         /*
