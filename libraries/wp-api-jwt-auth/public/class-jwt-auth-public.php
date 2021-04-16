@@ -240,13 +240,14 @@ class Jwt_Auth_Public
         }
 
         if (!$auth) {
-            return new WP_Error(
-                'jwt_auth_no_auth_header',
-                'Authorization header not found.',
-                array(
-                    'status' => 403,
-                )
-            );
+            //not having an auth token is not an error on every single request
+//            return new WP_Error(
+//                'jwt_auth_no_auth_header',
+//                'Authorization header not found.',
+//                array(
+//                    'status' => 403,
+//                )
+//            );
         }
 
         /*
