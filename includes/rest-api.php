@@ -38,7 +38,8 @@ class DT_Mobile_App_Endpoints
         register_rest_route(
             $namespace, 'location-data', [
                 "methods" => "GET",
-                "callback" => [ $this, 'get_location_data' ]
+                "callback" => [ $this, 'get_location_data' ],
+                'permission_callback' => '__return_true',
             ]
         );
 
@@ -46,6 +47,7 @@ class DT_Mobile_App_Endpoints
             $namespace, 'locations', [
                 "methods" => "GET",
                 "callback" => [ $this, 'get_locations' ],
+                'permission_callback' => '__return_true',
             ]
         );
     }
@@ -58,7 +60,7 @@ class DT_Mobile_App_Endpoints
         }
         $max_date = $wpdb->get_var( "
             SELECT MAX(g.modification_date)
-            FROM $wpdb->dt_location_grid g 
+            FROM $wpdb->dt_location_grid g
         " );
         return [
             "last_modified_date" => $max_date
@@ -81,7 +83,7 @@ class DT_Mobile_App_Endpoints
         }
         $max_date = $wpdb->get_var( "
             SELECT MAX(g.modification_date)
-            FROM $wpdb->dt_location_grid g 
+            FROM $wpdb->dt_location_grid g
         " );
         return [
             "last_modified_date" => $max_date,
