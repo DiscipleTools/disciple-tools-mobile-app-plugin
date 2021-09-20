@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Disciple Tools - Mobile App Extension
+ *Plugin Name: Disciple.Tools - Mobile App Extension
  * Plugin URI: https://github.com/DiscipleTools/disciple-tools-mobile-app-plugin
  * Description: Disciple Tools - Mobile App Extension supports integration with the disciple tools mobile app
  * Version:  v1.15
