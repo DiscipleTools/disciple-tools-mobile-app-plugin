@@ -2,7 +2,7 @@
 /**
  *Plugin Name: Disciple.Tools - Mobile App Extension
  * Plugin URI: https://github.com/DiscipleTools/disciple-tools-mobile-app-plugin
- * Description: Disciple Tools - Mobile App Extension supports integration with the disciple tools mobile app
+ * Description: Disciple.Tools - Mobile App Extension supports integration with the Disciple.Tools mobile app
  * Version:  v1.15
  * Author URI: https://github.com/DiscipleTools
  * GitHub Plugin URI: https://github.com/DiscipleTools/disciple-tools-mobile-app-plugin
@@ -197,7 +197,7 @@ class DT_Mobile_App {
     public static function activation() {
 
         // Confirm 'Administrator' has 'manage_dt' privilege. This is key in 'remote' configuration when
-        // Disciple Tools theme is not installed, otherwise this will already have been installed by the Disciple Tools Theme
+        // Disciple.Tools theme is not installed, otherwise this will already have been installed by the Disciple.Tools Theme
         $role = get_role( 'administrator' );
         if ( !empty( $role ) ) {
             $role->add_cap( 'manage_dt' ); // gives access to dt plugin options
@@ -285,9 +285,9 @@ function dt_mobile_app_hook_admin_notice() {
     global $dt_mobile_app_required_dt_theme_version;
     $wp_theme = wp_get_theme();
     $current_version = $wp_theme->version;
-    $message = __( "'Disciple Tools - Mobile App Extension' plugin requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or make sure it is latest version.", "dt_mobile" );
+    $message = __( "'Disciple.Tools - Mobile App Extension' plugin requires 'Disciple.Tools' theme to work. Please activate 'Disciple.Tools' theme or make sure it is latest version.", "dt_mobile" );
     if ( $wp_theme->get_template() === "disciple-tools-theme" ){
-        $message .= sprintf( esc_html__( 'Current Disciple Tools version: %1$s, required version: %2$s', 'dt_mobile' ), esc_html( $current_version ), esc_html( $dt_mobile_app_required_dt_theme_version ) );
+        $message .= sprintf( esc_html__( 'Current Disciple.Tools version: %1$s, required version: %2$s', 'dt_mobile' ), esc_html( $current_version ), esc_html( $dt_mobile_app_required_dt_theme_version ) );
     }
     // Check if it's been dismissed...
     if ( ! get_option( 'dismissed-dt-mobile-app', false ) ) { ?>
