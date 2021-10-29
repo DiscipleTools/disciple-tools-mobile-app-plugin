@@ -3,7 +3,7 @@
  *Plugin Name: Disciple.Tools - Mobile App Extension
  * Plugin URI: https://github.com/DiscipleTools/disciple-tools-mobile-app-plugin
  * Description: Disciple.Tools - Mobile App Extension supports integration with the Disciple.Tools mobile app
- * Version:  v1.15
+ * Version:  v1.15.1
  * Author URI: https://github.com/DiscipleTools
  * GitHub Plugin URI: https://github.com/DiscipleTools/disciple-tools-mobile-app-plugin
  * Requires at least: 4.7.0
