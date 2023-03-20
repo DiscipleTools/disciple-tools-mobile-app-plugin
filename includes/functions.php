@@ -179,7 +179,9 @@ class DT_Mobile_App_Plugin_Functions
                 }
             }
             // Build the notification data
-            $notification = [ 'body' => $message ];
+//            $notification = [ 'body' => $message ];
+            $notification = [ 'body' => $message, "data" => json_encode( array( "id" => $notification['post_id'], "type" => get_post_type( $notification['post_id'] ) ) ) ];
+
 
             // Notify an interest with a notification
             try {
