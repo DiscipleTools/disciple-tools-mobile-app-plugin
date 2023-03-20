@@ -8,7 +8,7 @@ The Disciple.Tools Mobile App extends the Disciple.Tools system to support mobil
 * [Mobile App Team](https://github.com/orgs/DiscipleTools/teams/mobile-app-lead-team)
 
 ## Dependent Repo
-* [Android App](https://github.com/DiscipleTools/disciple-tools-mobile-app-android)
+* [Mobile App](https://github.com/DiscipleTools/disciple-tools-mobile-app-android)
 
 ## Setup
 This plugin is bundled with the JWT plugin.
