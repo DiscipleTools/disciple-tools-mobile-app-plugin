@@ -23,7 +23,7 @@ jobs:
     - name: Build project
       run: |
         mkdir disciple-tools-mobile-app-plugin |
-        cp -r disciple-tools-mobile-app-plugin.php vendor libraries includes languages LICENSE version-control.json disciple-tools-mobile-app-plugin/
+        cp -r disciple-tools-mobile-app-plugin.php vendor includes languages LICENSE version-control.json disciple-tools-mobile-app-plugin/
         zip -r disciple-tools-mobile-app-plugin.zip disciple-tools-mobile-app-plugin
     - name: Create Release
       id: create_release
