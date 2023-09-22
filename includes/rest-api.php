@@ -37,16 +37,16 @@ class DT_Mobile_App_Endpoints
 
         register_rest_route(
             $namespace, 'location-data', [
-                "methods" => "GET",
-                "callback" => [ $this, 'get_location_data' ],
+                'methods' => 'GET',
+                'callback' => [ $this, 'get_location_data' ],
                 'permission_callback' => '__return_true',
             ]
         );
 
         register_rest_route(
             $namespace, 'locations', [
-                "methods" => "GET",
-                "callback" => [ $this, 'get_locations' ],
+                'methods' => 'GET',
+                'callback' => [ $this, 'get_locations' ],
                 'permission_callback' => '__return_true',
             ]
         );
@@ -56,20 +56,20 @@ class DT_Mobile_App_Endpoints
     public function get_location_data() {
         global $wpdb;
         if ( !$this->has_permission() ) {
-            return new WP_Error( __FUNCTION__, "You do not have permission for this", [ 'status' => 403 ] );
+            return new WP_Error( __FUNCTION__, 'You do not have permission for this', [ 'status' => 403 ] );
         }
         $max_date = $wpdb->get_var( "
             SELECT MAX(g.modification_date)
             FROM $wpdb->dt_location_grid g
         " );
         return [
-            "last_modified_date" => $max_date
+            'last_modified_date' => $max_date
         ];
     }
 
     public function get_locations( WP_REST_Request $request ) {
         if ( !$this->has_permission() ) {
-            return new WP_Error( __FUNCTION__, "You do not have permission for this", [ 'status' => 403 ] );
+            return new WP_Error( __FUNCTION__, 'You do not have permission for this', [ 'status' => 403 ] );
         }
         global $wpdb;
         $results = $wpdb->get_results( "
@@ -79,14 +79,14 @@ class DT_Mobile_App_Endpoints
 
         $prepared = [];
         foreach ( $results as $row ) {
-            $prepared[$row["grid_id"]] = $row["alt_name"];
+            $prepared[$row['grid_id']] = $row['alt_name'];
         }
         $max_date = $wpdb->get_var( "
             SELECT MAX(g.modification_date)
             FROM $wpdb->dt_location_grid g
         " );
         return [
-            "last_modified_date" => $max_date,
+            'last_modified_date' => $max_date,
             'location_grid' => $prepared, //$location_grid,
             'total' => count( $results )
         ];

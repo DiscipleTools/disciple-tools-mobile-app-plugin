@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/DiscipleTools/disciple-tools-mobile-app-plugin.svg?branch=master)](https://travis-ci.com/DiscipleTools/disciple-tools-mobile-app-plugin)
+![Build Status](https://github.com/DiscipleTools/disciple-tools-mobile-app-plugin/actions/workflows/ci.yml/badge.svg?branch=master)
 
 ![Plugin Banner](https://raw.githubusercontent.com/DiscipleTools/disciple-tools-mobile-app-plugin/master/mobile-app-plugin-banner.png)
 # Disciple.Tools Mobile App Plugin
