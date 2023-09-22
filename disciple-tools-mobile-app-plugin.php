@@ -1,6 +1,6 @@
 <?php
 /**
- *Plugin Name: Disciple.Tools - Mobile App Extension
+ * Plugin Name: Disciple.Tools - Mobile App Extension
  * Plugin URI: https://github.com/DiscipleTools/disciple-tools-mobile-app-plugin
  * Description: Disciple.Tools - Mobile App Extension supports integration with the Disciple.Tools mobile app
  * Version:  v1.16.0
@@ -21,14 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 
-$class_already_loaded = false;
-if ( ! class_exists( 'Jwt_Auth' ) ) {
-    require_once( 'libraries/wp-api-jwt-auth/jwt-auth.php' );
-} else {
-    $class_already_loaded = true;
-}
-
-$dt_mobile_app_required_dt_theme_version = '1.0.0';
+$dt_mobile_app_required_dt_theme_version = '1.47.0';
 
 /**
  * Gets the instance of the `DT_Mobile_App` class.
@@ -84,7 +77,6 @@ class DT_Mobile_App {
     public $dir_uri = '';
     public $img_uri = '';
     public $includes_path;
-    public $show_jwt_error = false;
 
     /**
      * Returns the instance.
@@ -114,17 +106,9 @@ class DT_Mobile_App {
      * @return void
      */
     private function __construct() {
-        add_action( 'admin_notices', [ $this, 'mobile_app_error' ] );
     }
 
 
-    public function mobile_app_error() {
-        if ( $this->show_jwt_error ){
-            $class = 'notice notice-error';
-            $message = __( 'For the mobile app to work, please remove this plugin: JWT Authentication for WP-API ', 'sample-text-domain' );
-            printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
-        }
-    }
     /**
      * Loads files needed by the plugin.
      *
@@ -133,11 +117,6 @@ class DT_Mobile_App {
      * @return void
      */
     private function includes() {
-        global $class_already_loaded;
-        if ( $class_already_loaded ){
-            $this->show_jwt_error = true;
-
-        }
         require_once( 'includes/admin/admin-menu-and-tabs.php' );
         require_once plugin_dir_path( __FILE__ ) . '/vendor/autoload.php';
         require_once( 'includes/functions.php' );
@@ -322,19 +301,6 @@ if ( !function_exists( "dt_hook_ajax_notice_handler" )){
         }
     }
 }
-
-add_action( "plugins_loaded", function(){
-    /** Setup key for JWT authentication */
-    if ( !defined( 'JWT_AUTH_SECRET_KEY' ) ) {
-        if ( get_option( "my_jwt_key" ) ) {
-            define( 'JWT_AUTH_SECRET_KEY', get_option( "my_jwt_key" ) );
-        } else {
-            $iv = password_hash( random_bytes( 16 ), PASSWORD_DEFAULT );
-            update_option( 'my_jwt_key', $iv );
-            define( 'JWT_AUTH_SECRET_KEY', $iv );
-        }
-    }
-});
 
 
 /**
