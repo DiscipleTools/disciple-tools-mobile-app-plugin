@@ -181,7 +181,6 @@ class DT_Mobile_App {
         if ( !empty( $role ) ) {
             $role->add_cap( 'manage_dt' ); // gives access to dt plugin options
         }
-
     }
 
     /**
@@ -313,7 +312,7 @@ if ( !function_exists( 'dt_hook_ajax_notice_handler' ) ){
  * @see https://github.com/DiscipleTools/disciple-tools-version-control/wiki/How-to-Update-the-Starter-Plugin
  */
 add_action( 'plugins_loaded', function (){
-    if ( is_admin() && !( is_multisite() && class_exists( 'DT_Multisite' ) ) || wp_doing_cron() ){
+    if ( ( is_admin() && !( is_multisite() && class_exists( 'DT_Multisite' ) ) ) || wp_doing_cron() ){
         if ( ! class_exists( 'Puc_v4_Factory' ) ) {
             // find the Disciple.Tools theme and load the plugin update checker.
             foreach ( wp_get_themes() as $theme ){
